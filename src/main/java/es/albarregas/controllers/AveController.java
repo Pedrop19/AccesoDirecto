@@ -25,7 +25,7 @@ import es.albarregas.beans.Ave;
  *
  * @author Pedro Lazaro
  */
-@WebServlet(name = "AveController", urlPatterns = {"/AveController"})
+@WebServlet(name = "AveController", urlPatterns = { "/AveController" })
 public class AveController extends HttpServlet {
 
     @Override
@@ -40,10 +40,10 @@ public class AveController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -66,35 +66,40 @@ public class AveController extends HttpServlet {
         String url = "";
         Ave ave;
         LinkedList<Ave> aves = new LinkedList<>();
-        try (
-                Connection conexion = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/pruebaJava",
-                        "java2024", "Java*2024")) {
-            switch (boton) {
+        Connection conexion = null;
+        Statement sentencia = null;
+        ResultSet resultado = null;
+        try {
+            conexion = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/pruebasjava",
+                            "java2024", "Java*2024");
+            sentencia = conexion.createStatement();
+             switch (boton) {
                 case "una":
-                    try {
+                try{
                     String sql = "SELECT * FROM aves WHERE anilla = '" + anilla + "'";
-                    Statement sentencia = conexion.createStatement();
-                    ResultSet resultado = sentencia.executeQuery(sql);
+                    resultado = sentencia.executeQuery(sql);
                     ave = new Ave();
                     while (resultado.next()) {
                         ave.setAnilla(resultado.getString("anilla"));
                         ave.setEspecie(resultado.getString("especie"));
                         ave.setFecha(resultado.getString("fecha"));
                         ave.setLugar(resultado.getString("lugar"));
+                        aves.add(ave);
                     }
-                    request.setAttribute("ave", ave);
-                    url = "JSP/una.jsp";
-                } catch (SQLException e) {
+                    request.setAttribute("aves", aves);
+                    url = "JSP/vistaFinal.jsp";
+                }catch (SQLException e) {
                     e.printStackTrace();
-                    System.out.println("Error en la conexión" + e.getMessage());
+                } finally {
+                    resultado.close();
                 }
+                    
                 break;
                 case "todas":
                 try {
                     String sql = "SELECT * FROM aves";
-                    Statement sentencia = conexion.createStatement();
-                    ResultSet resultado = sentencia.executeQuery(sql);
+                    resultado = sentencia.executeQuery(sql);
                     while (resultado.next()) {
                         ave = new Ave();
                         ave.setAnilla(resultado.getString("anilla"));
@@ -104,19 +109,26 @@ public class AveController extends HttpServlet {
                         aves.add(ave);
                     }
                     request.setAttribute("aves", aves);
-                    url = "JSP/todas.jsp";
+                    url = "JSP/vistaFinal.jsp";
+                    break;
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    System.out.println("Error en la conexión" + e.getMessage());
+                } finally {
+                    resultado.close();
                 }
-
-                break;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+           if(conexion != null && sentencia != null) {
+               try {
+                   conexion.close();
+                   sentencia.close();
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+           }
         }
-
         request.getRequestDispatcher(url).forward(request, response);
     }
 

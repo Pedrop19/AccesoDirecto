@@ -11,9 +11,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Ver una</title>
+        <link rel="stylesheet" href="./CSS/style.css">
     </head>
     <body>
-        <h1>Información del ave seleccionada</h1>
+        <div class="vistaFinal-container">
+            <h1>Información del ave seleccionada</h1>
         <table>
             <tr>
                 <th>Anilla</th>
@@ -21,11 +23,17 @@
                 <th>Lugar</th>
                 <th>Fecha</th>
             <tr>
+            <c:forEach var="ave" items="${aves}">
             <tr>
                 <td>${ave.anilla}</td>
                 <td>${ave.especie}</td>
                 <td>${ave.lugar}</td>
                 <td>${ave.fecha}</td>
             </tr>
+            </c:forEach>
+        </table>
+            <button class="button" id="botonFinal" onclick="location.href='index.html'">Volver</button>
+        </div>
     </body>
 </html>
+
