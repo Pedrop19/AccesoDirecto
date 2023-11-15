@@ -16,24 +16,31 @@
     <body>
         <div class="vistaFinal-container">
             <h1>Información del ave seleccionada</h1>
-        <table>
-            <tr>
-                <th>Anilla</th>
-                <th>Especie</th>
-                <th>Lugar</th>
-                <th>Fecha</th>
-            <tr>
-            <c:forEach var="ave" items="${aves}">
-            <tr>
-                <td>${ave.anilla}</td>
-                <td>${ave.especie}</td>
-                <td>${ave.lugar}</td>
-                <td>${ave.fecha}</td>
-            </tr>
-            </c:forEach>
-        </table>
-            <button class="button" id="botonFinal" onclick="location.href='index.html'">Volver</button>
-        </div>
+        <c:choose>
+            <c:when test="${requestScope.error} != null">
+                <p>${requestScope.error}</p>
+            </c:when>
+            <c:otherwise>
+                <table>
+                    <tr>
+                        <th>Anilla</th>
+                        <th>Especie</th>
+                        <th>Lugar</th>
+                        <th>Fecha</th>
+                    <tr>
+                    <c:forEach var="ave" items="${aves}">
+                        <tr>
+                            <td>${ave.anilla}</td>
+                            <td>${ave.especie}</td>
+                            <td>${ave.lugar}</td>
+                            <td>${ave.fecha}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            </c:otherwise>
+        </c:choose>
+        <button class="button" id="botonFinal" onclick="location.href='index.html'">Volver</button>
     </body>
 </html>
 

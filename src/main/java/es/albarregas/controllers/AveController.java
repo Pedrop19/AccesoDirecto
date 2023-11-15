@@ -69,6 +69,7 @@ public class AveController extends HttpServlet {
         Connection conexion = null;
         Statement sentencia = null;
         ResultSet resultado = null;
+        String error = "";
         try {
             conexion = DriverManager.getConnection(
                             "jdbc:mysql://localhost:3306/pruebasjava",
@@ -80,15 +81,19 @@ public class AveController extends HttpServlet {
                     String sql = "SELECT * FROM aves WHERE anilla = '" + anilla + "'";
                     resultado = sentencia.executeQuery(sql);
                     ave = new Ave();
-                    while (resultado.next()) {
+                    if(resultado.next()){
                         ave.setAnilla(resultado.getString("anilla"));
                         ave.setEspecie(resultado.getString("especie"));
                         ave.setFecha(resultado.getString("fecha"));
                         ave.setLugar(resultado.getString("lugar"));
                         aves.add(ave);
+                        url = "JSP/vistaFinal.jsp";
+                    }else{
+                        error = "No se ha encontrado ninguna ave con esa anilla";
+                        url = "JSP/error.jsp";
+                        request.setAttribute("error", error);
                     }
-                    request.setAttribute("aves", aves);
-                    url = "JSP/vistaFinal.jsp";
+                    break;
                 }catch (SQLException e) {
                     e.printStackTrace();
                 } finally {
@@ -108,7 +113,6 @@ public class AveController extends HttpServlet {
                         ave.setLugar(resultado.getString("lugar"));
                         aves.add(ave);
                     }
-                    request.setAttribute("aves", aves);
                     url = "JSP/vistaFinal.jsp";
                     break;
                 } catch (SQLException e) {
@@ -117,6 +121,7 @@ public class AveController extends HttpServlet {
                     resultado.close();
                 }
             }
+            request.setAttribute("aves", aves);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
