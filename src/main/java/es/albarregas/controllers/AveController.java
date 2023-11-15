@@ -81,15 +81,19 @@ public class AveController extends HttpServlet {
                     String sql = "SELECT * FROM aves WHERE anilla = '" + anilla + "'";
                     resultado = sentencia.executeQuery(sql);
                     ave = new Ave();
-                    if(resultado.next()){
+                    if (resultado.next()) {
                         ave.setAnilla(resultado.getString("anilla"));
                         ave.setEspecie(resultado.getString("especie"));
                         ave.setFecha(resultado.getString("fecha"));
                         ave.setLugar(resultado.getString("lugar"));
                         aves.add(ave);
                         url = "JSP/vistaFinal.jsp";
-                    }else{
-                        error = "No se ha encontrado ninguna ave con esa anilla";
+                    } else if (anilla == null || anilla.equals("")) {
+                        error = "No se ha introducido ninguna anilla";
+                        url = "JSP/error.jsp";
+                        request.setAttribute("error", error);
+                    } else {
+                        error = "No se ha encontrado ninguna ave con la anilla " + anilla + "";
                         url = "JSP/error.jsp";
                         request.setAttribute("error", error);
                     }
