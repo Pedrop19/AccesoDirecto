@@ -15,7 +15,9 @@
         <link href="CSS/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <h1>${error}</h1>
-        <button id="botonFinal" onclick="window.location.href='${pageContext.request.contextPath}/index.html'"">Volver</button>
+        <div class="vistaFinal-container">
+            <h1>${error}</h1>
+            <button id="botonFinal" onclick="window.location.href='${pageContext.request.contextPath}/index.html'"">Volver</button>
+        </div>
     </body>
 </html>

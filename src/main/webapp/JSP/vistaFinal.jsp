@@ -32,8 +32,8 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <button class="button" id="botonFinal" onclick="location.href='index.html'">Volver</button>
-            </div>
+            <button class="button" id="botonFinal" onclick="location.href='index.html'">Volver</button>
+        </div>
     </body>
 </html>
 
